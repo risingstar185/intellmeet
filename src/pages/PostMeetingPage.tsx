@@ -27,7 +27,8 @@ import {
 
 interface ActionItem {
   task: string
-  assignee: string
+  assigneeName?: string
+   deadline: string
   initials: string
   color: string
   due: string
@@ -335,7 +336,7 @@ const handleGenerateSummary = async () => {
       `/transcript/${id}/generate-summary`
     );
 //console.log('Generated summary:', res.data.summary);
-    setMeetingData((prev) => ({
+    setMeetingData((prev:any) => ({
       ...prev,
     summary: res.data.meeting.summary
     }));
@@ -565,7 +566,7 @@ try {
 
   {meetingData.actionItems?.length > 0 ? (
     <div className="space-y-4">
-      {meetingData.actionItems.map((item, index) => (
+      {meetingData.actionItems.map((item: ActionItem, index: number) => (
         <div
           key={index}
           className="bg-white/[0.05] border border-white/10 rounded-xl p-4"
