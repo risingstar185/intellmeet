@@ -13,7 +13,7 @@ interface Task {
   title: string;
   priority: Priority;
   status: Status;
-  assignee: string;
+  assigneeName: string;
   initials: string;
   color: string;
   source: string;
