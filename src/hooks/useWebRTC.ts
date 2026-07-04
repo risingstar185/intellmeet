@@ -12,7 +12,10 @@ export interface PeerEntry {
   connectionState: 'connecting' | 'connected' | 'failed'
   isInitiator: boolean
 }
-
+interface OfferPayload {
+  from: string
+  offer: Peer.SignalData
+}
 export interface UseWebRTCReturn {
   localStream: MediaStream | null
   peers: PeerEntry[]
@@ -264,9 +267,8 @@ export function useWebRTC(
       removePeer(socketId)
     }
 
-  const handleOffer = ({ from, offer }) => {
-
-    //console.log("OFFER RECEIVED", from);
+  const handleOffer = ({ from, offer }: OfferPayload) => {
+ //console.log("OFFER RECEIVED", from);
 
     let existing = peersRef.current.get(from);
 
