@@ -21,6 +21,7 @@ interface Meeting {
   status: string;
   scheduledAt: string;
   duration: number;
+   description?: string;
   createdAt: string;
 }
 
