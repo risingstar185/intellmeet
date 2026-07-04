@@ -20,7 +20,13 @@ import {
   Sparkles
 } from 'lucide-react'
 
-const getStatCards = (stats) => [
+interface DashboardStats {
+  totalMeetings: number
+  totalTasks: number
+  totalUsers: number
+  aiTimeSaved: number
+}
+const getStatCards =  (stats: DashboardStats)=>  [
   {
     label: 'Total Meetings',
     value: stats.totalMeetings,
@@ -68,6 +74,13 @@ interface Meeting {
   participants?: string[]
   status?: string
 }
+interface LatestSummary {
+  meeting: {
+    _id: string
+    title: string
+    summary: string
+  }
+}
 
 function getMeetingStatus(scheduledAt: string, duration = 60) {
   const now = new Date()
@@ -114,12 +127,12 @@ function StatusBadge({ status }: { status: string }) {
 
 export default function DashboardPage() {
 
-  const [stats, setStats] = useState({
+ const [stats, setStats] = useState<DashboardStats>({
   totalMeetings: 0,
   totalTasks: 0,
   totalUsers: 0,
   aiTimeSaved: 0,
-});
+})
 
 const fetchStats = async () => {
   try {
@@ -149,7 +162,7 @@ useEffect(() => {
   const [meetings, setMeetings] = useState<Meeting[]>([])
   const [meetingsLoading, setMeetingsLoading] = useState(true)
   const [meetingsError, setMeetingsError] = useState<string | null>(null)
-const [summary, setSummary] = useState<string | null>(null);
+const [summary, setSummary] = useState<LatestSummary | null>(null)
 //console.log('summary', summary);
 const summaryPoints =
   summary?.meeting?.summary
