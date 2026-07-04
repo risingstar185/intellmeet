@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client'
 
 // VITE_BACKEND_URL is set in Vercel env vars for production.
 // Falls back to local dev server so no .env file is needed locally.
-const SOCKET_URL: string = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+const SOCKET_URL: string = import.meta.env.VITE_BACKEND_URL || 'https://intellmeet-ghpj.onrender.com'
 
 let socketInstance: Socket | null = null
 
