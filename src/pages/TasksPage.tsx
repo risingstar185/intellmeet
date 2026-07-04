@@ -279,6 +279,7 @@ console.log(task)
           key={task.id}
           task={task}
           isDone={col === "done"}
+          onDelete={deleteTask}
         />
       ))
     ) : (
