@@ -289,7 +289,23 @@ export default function SettingsPage() {
 };
 
   const initials = (name || 'U').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'U'
+  const handleLogoutAccount = async () => {
+   const refreshToken = localStorage.getItem("refreshToken");
+try {
+    await api.post("/auth/logout", {
+      refreshToken,
+    });
 
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+
+    navigate("/login");
+  }
+    catch (err) {
+      console.error("Failed to logout account", err);
+    }
+  }
   return (
     <div
   className="flex min-h-screen w-full overflow-x-hidden"
@@ -638,6 +654,14 @@ export default function SettingsPage() {
                       >
                         <Trash2 size={14} />
                         Delete Account
+                      </button>
+                       <button
+                        id="delete-account-btn"
+                       onClick={handleLogoutAccount}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition-all flex-shrink-0 cursor-pointer bg-red-600 hover:bg-red-500"
+                      >
+                        <Trash2 size={14} />
+                        Logout Account
                       </button>
                     </div>
                   </div>
