@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors({
     origin: [
-        'https://intellmeet-1-zjen.onrender.com',
+        'https://intellmeet-ghpj.onrender.com',
     ],
     credentials: true
 }));
@@ -56,7 +56,7 @@ connectDB();
 const io = new Server(server, {
     cors: {
         origin: [
-            'https://intellmeet-1-zjen.onrender.com',
+            'https://intellmeet-ghpj.onrender.com',
         ],
         credentials: true
     }
