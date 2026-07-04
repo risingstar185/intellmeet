@@ -40,15 +40,15 @@ newUser.refreshToken = refreshToken;
 await newUser.save();
 res.cookie("accessToken", accessToken, {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+  secure: true,
+  sameSite: "None",
   maxAge: 15 * 24 * 60 * 60 * 1000
 });
 
 res.cookie("refreshToken", refreshToken, {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+ secure: true,
+  sameSite: "None",
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
@@ -90,15 +90,15 @@ await user.save();
 
 res.cookie("accessToken", accessToken, {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+ secure: true,
+  sameSite: "None",
  maxAge: 15 * 24 * 60 * 60 * 1000
 });
 
 res.cookie("refreshToken", refreshToken, {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+  secure: true,
+  sameSite: "None",
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
@@ -292,8 +292,8 @@ const deleteAccount = async (req, res) => {
 
     res.clearCookie("accessToken", {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+       secure: true,
+  sameSite: "None",
     });
 
     res.json({
