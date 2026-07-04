@@ -45,6 +45,7 @@
 | **AI** | OpenAI GPT-3.5-turbo (summaries + action items) |
 | **Database** | MongoDB Atlas + Mongoose |
 | **Real-time** | Socket.io + simple-peer (WebRTC) |
+| **transcription** | assemblyai and services|
 | **Auth** | JWT (access + refresh tokens), bcryptjs |
 | **Deployment** | Vercel (frontend) · Render (backend) · MongoDB Atlas |
 
@@ -92,9 +93,9 @@
 
 | | URL |
 |--|-----|
-| 🌐 Frontend | https://your-app.vercel.app |
-| 🔌 Backend API | https://your-backend.onrender.com |
-| ❤️ Health Check | https://your-backend.onrender.com/health |
+| 🌐 Frontend | https://intellmeet-1-zjen.onrender.com/|
+| 🔌 Backend API | https://intellmeet-ghpj.onrender.com|
+| ❤️ Health Check |https://intellmeet-ghpj.onrender.com/health |
 
 > **Note:** The Render free tier spins down after 15 minutes of inactivity. The first request after a cold start may take ~30 seconds.
 
@@ -104,15 +105,22 @@
 
 | Dashboard | Meeting Room |
 |-----------|-------------|
-| ![Dashboard](https://placehold.co/600x380/0D1117/7C3AED?text=Dashboard) | ![Meeting](https://placehold.co/600x380/0D1117/06B6D4?text=Meeting+Room) |
+| ![Dashboard]<img width="1805" height="951" alt="image" src="https://github.com/user-attachments/assets/683fd82f-a031-464d-9120-ebeb8bfd92ed" />
+ | ![Meeting]<img width="1857" height="887" alt="image" src="https://github.com/user-attachments/assets/76316ac4-4980-4d0a-ba15-bdc4861ea335" />
+ |
 
 | Post-Meeting AI Summary | Task Board |
 |------------------------|------------|
-| ![Summary](https://placehold.co/600x380/0D1117/10B981?text=AI+Summary) | ![Tasks](https://placehold.co/600x380/0D1117/F59E0B?text=Task+Board) |
+| ![Summary]<img width="1906" height="897" alt="image" src="https://github.com/user-attachments/assets/6a311043-1a6e-4ed7-8e44-a6139e85fd7d" />
+ | ![Tasks]<img width="1861" height="927" alt="image" src="https://github.com/user-attachments/assets/4f3c0cfa-c143-42e0-97b2-15c5e200b519" />
+|
+<img width="1906" height="896" alt="image" src="https://github.com/user-attachments/assets/454794c9-36b8-4182-bbc7-d1433a930255" />
+<img width="1907" height="881" alt="image" src="https://github.com/user-attachments/assets/99bda803-5c5d-4ef4-bd5e-74dbb3c97707" />
 
 | Settings |
 |----------|
-| ![Settings](https://placehold.co/600x380/0D1117/EF4444?text=Settings) |
+| ![Settings]<img width="1891" height="912" alt="image" src="https://github.com/user-attachments/assets/f134b1d5-2e69-433d-8509-4e1f6ecd04a0" />
+ |
 
 ---
 
@@ -129,6 +137,7 @@
 ```bash
 git clone 
 cd IntellMeet
+npm run dev
 ```
 
 ### 2. Backend setup
@@ -144,7 +153,7 @@ cp .env.example .env
 # → Edit .env and fill in MONGODB_URI, JWT_SECRET, etc.
 
 # Start dev server (port 5000)
-npm run dev
+npm run dev or nodemon
 ```
 
 ### 3. Frontend setup
@@ -161,7 +170,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:5173** — the app connects to the backend at `localhost:5000` automatically.
+Open **https://intellmeet-1-zjen.onrender.com/** — the app connects to the backend at `localhost:5000` automatically.
 
 ---
 
@@ -178,6 +187,7 @@ Open **http://localhost:5173** — the app connects to the backend at `localhost
 | `OPENAI_API_KEY` | ⚡ | OpenAI key — required for AI features |
 | `PORT` | — | Defaults to `5000`; Render sets this automatically |
 | `NODE_ENV` | — | `development` or `production` |
+| `Assemblyai_api_key`|`for transcription`|
 
 > Copy `backend/.env.example` as a starting point.
 
@@ -228,7 +238,7 @@ All REST endpoints are prefixed with `/api`. Protected routes require an `Author
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `POST` | `/summarize` | ✅ | Generate a meeting summary from a transcript |
+| `POST` | `/generate-summarize` | ✅ | Generate a meeting summary from a transcript |
 | `POST` | `/action-items` | ✅ | Extract action items from a transcript |
 | `POST` | `/analyze` | ✅ | Run summary + action items in parallel (combined endpoint) |
 
@@ -294,17 +304,28 @@ IntellMeet/
 │   │   ├── TasksPage.tsx        # Kanban task board
 │   │   ├── AnalyticsPage.tsx
 │   │   └── SettingsPage.tsx
+        ├── CreateTasksPage.tsx 
+        ├── Stats.tsx 
 │   ├── App.tsx                  # Router + route definitions
 │   ├── main.tsx
 │   └── index.css
 ├── backend/                    # Backend source (Node.js + Express)
 │   ├── controllers/
 │   │   ├── authController.js
+│   │   ├── analyzeTranscript.js
+│   │   ├── charts.js
+│   │   ├── contributer.js
+│   │   ├── getStats.js
+│   │   ├── authController.js
+│   │   ├── transcriptController.js
+│   │   ├── timeSavingCharts.js
+│   │   ├── googleAuthController.js
 │   │   ├── meetingController.js
 │   │   └── taskController.js
 │   ├── middleware/
 │   │   ├── authMiddleware.js    # JWT verification
 │   │   └── rateLimiter.js      # express-rate-limit for auth routes
+│   │   ├── socketAuthMiddleware.js
 │   ├── models/
 │   │   ├── User.js
 │   │   ├── Meeting.js
@@ -314,14 +335,19 @@ IntellMeet/
 │   │   ├── meetings.js
 │   │   ├── tasks.js
 │   │   └── ai.js
+│   │   └── count.js
+│   │   └── transcriptRouter.js
+│   │   └── webrtc.js
 │   ├── services/
-│   │   └── aiService.js        # OpenAI API calls (summarize + action items)
+│   │   └── aiService.js
+│   │   └── assemblyaiServices.js        # OpenAI API calls (summarize + action items)
 │   ├── socket/
-│   │   └── socketHandler.js    # All Socket.io event handlers + room state
+│   │   └── socketHandler.js
+│   │   └── transcriptSocket.js    # All Socket.io event handlers + room state
 │   ├── server.js               # Entry point (Express + Socket.io + MongoDB)
-│   ├── .env.example
+│   ├── .env
 │   └── package.json
-├── .env.example                # Frontend env template
+├── .env               # Frontend env template
 ├── DEPLOYMENT.md               # Full deployment guide
 ├── index.html
 ├── vite.config.ts
@@ -344,8 +370,8 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** for the complete step-by-step guide cover
 
 | Platform | Variable | Value |
 |----------|----------|-------|
-| Render | `CLIENT_URL` | `https://your-app.vercel.app` |
-| Vercel | `VITE_BACKEND_URL` | `https://your-backend.onrender.com` |
+| Render | `CLIENT_URL` | `https://intellmeet-1-zjen.onrender.com/` |
+| Vercel | `VITE_BACKEND_URL` | `https://intellmeet-ghpj.onrender.com/` |
 
 ---
 
@@ -380,7 +406,7 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
 
 <div align="center">
 
-Built with ❤️ by 
+Built with ❤️ by Ayush Patel
 
 ⭐ Star this repo if you found it useful!
 
